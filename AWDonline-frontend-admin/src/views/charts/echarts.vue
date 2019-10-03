@@ -131,9 +131,10 @@
 
             drawCharts() {
                 getUserList({'name':''}).then((res)=> {
-                    let Teams = [];
-                    let scores = [];
-                    let ans = res.data.teams;
+
+                    //let Teams=[];
+                    //let scores=[];
+                    let ans = res.data.users;
                     ans.sort((a, b) => {
                         if (a.score > b.score) {
                             return -1
@@ -145,12 +146,38 @@
                     })
                     this.tableData = ans;
                     let i = 0;
+                    for (let team of res.data.users) {
+                        this.teams.push(team.nickname);
+                        this.scores.push(team.score);
+                        i++;
+                        if (i == 10) break;
+                    }
+                    this.drawColumnChart();
+
+                });
+/*
+                getUserList({'name':''}).then((res)=> {
+                    let Teams = [];
+                    let scores = [];
+                    let ans = res.data.users;
+                    ans.sort((a, b) => {
+                        if (a.score > b.score) {
+                            return 1
+                        }
+                        else if (a.score < b.score) {
+                            return -1
+                        }
+                        else return 0;
+                    })
+                    this.tableData = ans;
+                    let i = 0;
                     for (let team of ans) {
                         Teams.push(team.nickname);
                         scores.push(team.score);
                         i++;
                         if (i == 10) break;
                     }
+                    this.scores=scores;
                     this.drawColumnChart();
                 });
                 /* this.drawBarChart()
@@ -163,7 +190,7 @@
             this.drawCharts()
         },
         updated: function () {
-            this.drawCharts()
+            this.drawColumnChart();
         }
     }
 </script>

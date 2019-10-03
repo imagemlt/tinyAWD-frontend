@@ -116,7 +116,7 @@
 						<el-radio class="radio" :label="0">女</el-radio>
 					</el-radio-group>
 				</el-form-item>-->
-				<el-form-item label="docker镜像名称" prop="name">
+				<el-form-item label="docker镜像名称" prop="dockername">
 					<el-input v-model="addForm.dockername" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="类型" prop="type">

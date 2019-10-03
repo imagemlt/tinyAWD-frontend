@@ -32,7 +32,7 @@
 			</el-table-column>
 			<el-table-column prop="password" label="ssh密码" min-width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="status" label="状态" min-width="100" sortable>
+			<el-table-column prop="attack_status" label="状态" min-width="100" sortable>
 			</el-table-column>
 			<!--<el-table-column prop="birth" label="得分" width="120" sortable>
 			</el-table-column>-->
@@ -87,7 +87,7 @@
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>-->
-		<el-col :lg="6" :sm="12" style="padding:10px 30px;">
+		<el-col :lg="6" :sm="12" style="padding:10px 30px">
 			<el-card class="box-card" style="">
 				<div slot="header" class="clearfix">
 					<span>我的信息</span>
@@ -104,6 +104,9 @@
 				</div>
 				<div  class="text item">
 					排名：{{user.level}}
+				</div>
+				<div  class="text item">
+					攻击id：{{user.attackid}}
 				</div>
 			</el-card>
 			<el-card class="box=card">
@@ -239,8 +242,21 @@
 				//NProgress.start();
 				getInstancesListPage(para).then((res) => {
 					this.total = res.data.total;
+					
 					this.instances = res.data.instances;
 					for(let instance of res.data.instances){
+						if(instance['attack_status']=='stable'){
+							instance['attack_status']='服务正常';
+						}
+						else if(instance['attack_status']=='attacked'){
+							instance['attack_status']='被攻击'
+						}
+						else if(instance['attack_status']=='down'){
+							instance['attack_status']='服务异常'
+						}
+						else{
+							instance['attack_status']='被攻击/服务异常'
+						}
 					    this.instancesMap[instance.id]=instance;
 					}
 					this.listLoading = false;
@@ -290,18 +306,20 @@
 			        getUserList({page:''}).then((res)=>{
                         let ans=res.data.users;
                         ans.sort((a,b)=>{
-                            if(a.score>b.score){return -1}
-                            else if(a.score<b.score){return 1}
+                            if(a.score>b.score){return 1}
+                            else if(a.score<b.score){return -1}
                             else return 0;
                         })
 						let i=0;
                         for(let u of ans){
-                            if(u.name==this.user.name){
+							console.log(u.name)
+							console.log(user.name)
+                            if(u.name==user.name){
                                 break;
 							}
 							i++;
 						}
-						user.level=i;
+						user.level=ans.length-i;
                         this.user=Object.assign({},user);
                         console.log(this.user.level);
 					})

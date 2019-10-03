@@ -7,7 +7,7 @@ let base = '';
 
 export const requestLogin = params => { return axios.post(`${base}/admin/login`, qs.stringify(params)).then(res => res.data); };
 
-export const getUserList = params => { return axios.get(`${base}/admin/teams`, { params: params }); };
+export const getUserList = params => { return axios.get(`${base}/team/list`, { params: params }); };
 
 export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
 
